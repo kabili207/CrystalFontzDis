@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2DEC150B-EC3D-4E54-8F76-A17CAA2C9F1C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Crystalfontz.Displays</RootNamespace>
+    <AssemblyName>Crystalfontz.Displays</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Binary.cs" />
+    <Compile Include="CFA633\CFA633.cs" />
+    <Compile Include="CFA633\CFA633Enums.cs" />
+    <Compile Include="CFA633\CFA633Events.cs" />
+    <Compile Include="CFA631\CFA631.cs" />
+    <Compile Include="CFA631\CFA631Enums.cs" />
+    <Compile Include="CFA631\CFA631Events.cs" />
+    <Compile Include="CFA635\CFA635.cs" />
+    <Compile Include="CFA635\CFA635Enums.cs" />
+    <Compile Include="CFA635\CFA635Events.cs" />
+    <Compile Include="CFA63x\CFA63xConst.cs" />
+    <Compile Include="CFA63x\CFA63XDisplay.cs" />
+    <Compile Include="CFA63x\CFA63XEnums.cs" />
+    <Compile Include="CFA63x\CFA63XEventArgs.cs" />
+    <Compile Include="CFA63x\CFA63Xevents.cs" />
+    <Compile Include="CFAPacket.cs" />
+    <Compile Include="ComDevice.cs" />
+    <Compile Include="CRC.cs" />
+    <Compile Include="LCDProgressBar.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SCAB\SCAB.cs" />
+    <Compile Include="SCAB\SCABEnums.cs" />
+    <Compile Include="SCAB\SCABEventArgs.cs" />
+    <Compile Include="SCAB\SCABEvents.cs" />
+    <Compile Include="ScrollingText.cs" />
+    <Compile Include="SerialPorts.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="GPL.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CFAArc.cd" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
