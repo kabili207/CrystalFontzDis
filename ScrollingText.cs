@@ -23,7 +23,7 @@ using System.Threading;
 
 namespace Crystalfontz.Displays
 {
-    public class ScrollingText
+    public class ScrollingText: IDisposable
     {
         private CFA63XDisplay _display;
         private Thread _scrollingThread;
@@ -41,6 +41,7 @@ namespace Crystalfontz.Displays
             _display = Display;
             this.ScrollSpeed = 750;
             this.PadString = 5;
+            this.Line = 0;
             _scrollingThread = new Thread(this.scrollingText);
         }
 
@@ -50,6 +51,8 @@ namespace Crystalfontz.Displays
         public string  Text { get; set; }
 
         public int PadString { get; set; }
+
+        public int Line { get; set; }
 
         /// <summary>
         /// This is the speed of the scrolling text in millseconds
@@ -72,6 +75,20 @@ namespace Crystalfontz.Displays
         {
             this._scrolling = false;
             this._scrollingThread.Abort();
+        }
+
+        /// <summary>
+        /// Stops the text scrolling on the screen.
+        /// </summary>
+        /// <param name="ResetText">If true will reset the scrolling text pos.</param>
+        public void StopScroll(bool ResetText)
+        {
+            this._scrolling = false;
+            this._scrollingThread.Abort();
+            if (ResetText)
+            {
+                _display.WriteLine(this.Line, this.Text.Substring(0,20), 0, false);
+            }
         }
 
         /// <summary>
@@ -100,9 +117,19 @@ namespace Crystalfontz.Displays
                 {
                     _strIdx = 0;
                 }
-                _display.WriteLine(0, _return,0,false);
+                _display.WriteLine(this.Line, _return,0,false);
                 Thread.Sleep(this.ScrollSpeed);
             }
         }
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            _scrolling = false;
+            this._scrollingThread.Abort();
+        }
+
+        #endregion
     }
 }

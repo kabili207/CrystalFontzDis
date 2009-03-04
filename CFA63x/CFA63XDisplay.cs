@@ -216,7 +216,28 @@ namespace Crystalfontz.Displays
 
                 //Response from read reporting and status
                 case 0x5E:
-                    //Add code here!!!!s
+                    if (ReportingAndStatus != null)
+                    {
+                        CFAReportingAndStatusEventArgs _eventArgs = new CFAReportingAndStatusEventArgs();
+
+                        _eventArgs.Fans = IntToEnum<Binary>(Packet.Data[0]);
+                        _eventArgs.Sensors1_8 = IntToEnum<Binary>(Packet.Data[1]);
+                        _eventArgs.Sensors9_15 = IntToEnum<Binary>(Packet.Data[2]);
+                        _eventArgs.Sensors16_23= IntToEnum<Binary>(Packet.Data[3]);
+                        _eventArgs.Sensors24_32 = IntToEnum<Binary>(Packet.Data[4]);
+                        _eventArgs.KeyPresses = Packet.Data[5];
+                        _eventArgs.KeyReleases = Packet.Data[6];
+                        _eventArgs.ATXPowerSwitch = IntToEnum<Binary>(Packet.Data[7]);
+                        _eventArgs.WatchdogCounter = Packet.Data[8];
+                        _eventArgs.Fan1Glitch = Packet.Data[9];
+                        _eventArgs.Fan2Glitch = Packet.Data[10];
+                        _eventArgs.Fan3Glitch = Packet.Data[11];
+                        _eventArgs.Fan4Glitch = Packet.Data[12];
+                        _eventArgs.Contrast = Packet.Data[13];
+                        _eventArgs.Backlight = Packet.Data[14];
+
+                        this.ReportingAndStatus(this, _eventArgs);
+                    }
                     break;
 
                 //Response from Send Data to LCD
@@ -366,6 +387,9 @@ namespace Crystalfontz.Displays
 
             //Append the CRC
             CRC.CalculateCRC(ref _sendList);
+
+            //Register Packet Event if we sent one!
+            
 
             //Write the command out
             _sp.Write(_sendList.ToArray(), 0, _sendList.Count);

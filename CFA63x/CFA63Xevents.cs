@@ -16,6 +16,9 @@ namespace Crystalfontz.Displays
         public delegate void PacketRecivedHandler(object sender, CFAPacket e);
         public event PacketRecivedHandler PacketRecived;
 
+        public delegate void PacketSentHandler(object sender, CFAPacket e);
+        public event PacketSentHandler PacketSent;
+
         public delegate void HardwareFirmwareVersionHandler(object sender, CFAHardwareFirmwareEventArgs e);
         public event HardwareFirmwareVersionHandler HardwareFirmwareVersion;
 

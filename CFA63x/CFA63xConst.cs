@@ -37,21 +37,30 @@ namespace Crystalfontz.Displays
     }
     public abstract partial class CFA63XDisplay
     {
-        protected List<RamLocation> RamLocations;
+        protected List<RamLocation> _ramLocations;
+
+        public List<RamLocation> RamLocations
+        {
+            get
+            {
+                return this._ramLocations;
+            }
+        }
+
         internal void BuildRamLocationList()
         {
-            RamLocations = new List<RamLocation>();
+            _ramLocations = new List<RamLocation>();
             //Setup ram locations for CFA631 & CFA633
-            RamLocations.Add(new RamLocation("CGRAM CFA631 CFA633", 0x40, 0x7F, DeviceID.CFA631 | DeviceID.CFA633));
-            RamLocations.Add(new RamLocation("Line 1 CFA631 CFA633", 0x80, 0x93, DeviceID.CFA631 | DeviceID.CFA633));
-            RamLocations.Add(new RamLocation("Line 2 CFA631 CFA633", 0xC0, 0xD3, DeviceID.CFA631 | DeviceID.CFA633));
+            _ramLocations.Add(new RamLocation("CGRAM CFA631 CFA633", 0x40, 0x7F, DeviceID.CFA631 | DeviceID.CFA633));
+            _ramLocations.Add(new RamLocation("Line 1 CFA631 CFA633", 0x80, 0x93, DeviceID.CFA631 | DeviceID.CFA633));
+            _ramLocations.Add(new RamLocation("Line 2 CFA631 CFA633", 0xC0, 0xD3, DeviceID.CFA631 | DeviceID.CFA633));
 
             //Setup ram locations for CFA635
-            RamLocations.Add(new RamLocation("CGRAM CFA635", 0x40, 0x7F, DeviceID.CFA635));
-            RamLocations.Add(new RamLocation("Line 0 CFA635", 0x80, 0x93, DeviceID.CFA635));
-            RamLocations.Add(new RamLocation("Line 1 CFA635", 0xA0, 0xB3, DeviceID.CFA635));
-            RamLocations.Add(new RamLocation("Line 2 CFA635", 0xC0, 0xD3, DeviceID.CFA635));
-            RamLocations.Add(new RamLocation("Line 3 CFA635", 0xE0, 0xF3, DeviceID.CFA635));
+            _ramLocations.Add(new RamLocation("CGRAM CFA635", 0x40, 0x7F, DeviceID.CFA635));
+            _ramLocations.Add(new RamLocation("Line 0 CFA635", 0x80, 0x93, DeviceID.CFA635));
+            _ramLocations.Add(new RamLocation("Line 1 CFA635", 0xA0, 0xB3, DeviceID.CFA635));
+            _ramLocations.Add(new RamLocation("Line 2 CFA635", 0xC0, 0xD3, DeviceID.CFA635));
+            _ramLocations.Add(new RamLocation("Line 3 CFA635", 0xE0, 0xF3, DeviceID.CFA635));
         }
     }
 }

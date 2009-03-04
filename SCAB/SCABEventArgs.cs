@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Crystalfontz.Displays;
+
 /*
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -56,5 +58,27 @@ namespace Crystalfontz.Modules
         public int Tachometer { get; set; }
         public int TimerTicks { get; set; }
         public int RPMS { get; set; }
+    }
+
+    public class CFAQueryFanEventArgs : EventArgs
+    {
+        public CFAQueryFanEventArgs()
+        {
+        }
+
+        public CFAQueryFanEventArgs(int Fan1, int Fan2, int Fan3, int Fan4, Binary FanFailSafe)
+        {
+            this.Fan1 = Fan1;
+            this.Fan2 = Fan2;
+            this.Fan3 = Fan3;
+            this.Fan4 = Fan4;
+            this.FanFailSafe = FanFailSafe;
+        }
+
+        public int Fan1 { get; set; }
+        public int Fan2 { get; set; }
+        public int Fan3 { get; set; }
+        public int Fan4 { get; set; }
+        public Binary FanFailSafe { get; set; }
     }
 }

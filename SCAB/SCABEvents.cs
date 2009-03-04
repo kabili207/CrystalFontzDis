@@ -28,5 +28,8 @@ namespace Crystalfontz.Modules
 
         public delegate void TemperatureReportHandler(object sender, CFATemperatureReportEventArgs e);
         public event TemperatureReportHandler TemperatureReport;
+
+        public delegate void QueryFanPowerHandler(object sender, CFAQueryFanEventArgs e);
+        public event QueryFanPowerHandler QueryFanPower;
     }
 }

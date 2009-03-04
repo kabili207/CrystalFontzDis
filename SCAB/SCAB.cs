@@ -203,6 +203,10 @@ namespace Crystalfontz.Modules
 
                 //Response from Query fan power and fail
                 case 0x5B:
+                    if (this.QueryFanPower != null)
+                    {
+                        this.QueryFanPower(this, new CFAQueryFanEventArgs(e.Data[0], e.Data[1], e.Data[2], e.Data[3], _display.IntToEnum<Binary>(e.Data[4])));
+                    }
                     break;
 
                 //Set ATX Power Switch Functionality
