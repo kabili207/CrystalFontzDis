@@ -21,15 +21,15 @@ using System.Text;
 
 namespace Crystalfontz.Modules
 {
-    [Flags]
-    public enum ATXPowerMask:byte
-    {
-        Reset_Invert = 0x02,
-        Power_Invert = 0x04,
-        LCD_Off_If_Host_Is_Off = 0x10,
-        Keypad_Reset = 0x20,
-        Keypad_Power_On = 0x40,
-        Keypad_Power_Off = 0x80
-    }
+	[Flags]
+	public enum ATXPowerMask:byte
+	{
+		Reset_Invert = 0x02,
+		Power_Invert = 0x04,
+		LCD_Off_If_Host_Is_Off = 0x10,
+		Keypad_Reset = 0x20,
+		Keypad_Power_On = 0x40,
+		Keypad_Power_Off = 0x80
+	}
 
 }

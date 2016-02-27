@@ -23,62 +23,72 @@ using Crystalfontz.Displays;
 
 namespace Crystalfontz.Modules
 {
-    public class CFATemperatureReportEventArgs : EventArgs
-    {
-        public CFATemperatureReportEventArgs()
-        {
-        }
+	public class CFATemperatureReportEventArgs : EventArgs
+	{
+		public CFATemperatureReportEventArgs()
+		{
+		}
 
-        public CFATemperatureReportEventArgs(int SensorIndex, double TemperatureC, double TemperatureF)
-        {
-            this.SensorIndex = SensorIndex;
-            this.TemperatureC = TemperatureC;
-            this.TemperatureF = TemperatureF;
-        }
-        public double TemperatureC { get; set; }
-        public double TemperatureF { get; set; }
-        public int SensorIndex { get; set; }
-    }
+		public CFATemperatureReportEventArgs(int SensorIndex, double TemperatureC, double TemperatureF)
+		{
+			this.SensorIndex = SensorIndex;
+			this.TemperatureC = TemperatureC;
+			this.TemperatureF = TemperatureF;
+		}
 
-    public class CFAFanReportEventArgs : EventArgs
-    {
-        public CFAFanReportEventArgs()
-        {
-        }
+		public double TemperatureC { get; set; }
 
-        public CFAFanReportEventArgs(int Index,int Tachometer,int TimerTicks,int RPMS)
-        {
-            this.Index = Index;
-            this.Tachometer = Tachometer;
-            this.TimerTicks = TimerTicks;
-            this.RPMS = RPMS;
-        }
+		public double TemperatureF { get; set; }
 
-        public int Index { get; set; }
-        public int Tachometer { get; set; }
-        public int TimerTicks { get; set; }
-        public int RPMS { get; set; }
-    }
+		public int SensorIndex { get; set; }
+	}
 
-    public class CFAQueryFanEventArgs : EventArgs
-    {
-        public CFAQueryFanEventArgs()
-        {
-        }
+	public class CFAFanReportEventArgs : EventArgs
+	{
+		public CFAFanReportEventArgs()
+		{
+		}
 
-        public CFAQueryFanEventArgs(int Fan1, int Fan2, int Fan3, int Fan4, Binary FanFailSafe)
-        {
-            this.Fan1 = Fan1;
-            this.Fan2 = Fan2;
-            this.Fan3 = Fan3;
-            this.Fan4 = Fan4;
-            this.FanFailSafe = FanFailSafe;
-        }
+		public CFAFanReportEventArgs(int Index, int Tachometer, int TimerTicks, int RPMS)
+		{
+			this.Index = Index;
+			this.Tachometer = Tachometer;
+			this.TimerTicks = TimerTicks;
+			this.RPMS = RPMS;
+		}
 
-        public int Fan1 { get; set; }
-        public int Fan2 { get; set; }
-        public int Fan3 { get; set; }
-        public int Fan4 { get; set; }
-        public Binary FanFailSafe { get; set; }
-    }
+		public int Index { get; set; }
+
+		public int Tachometer { get; set; }
+
+		public int TimerTicks { get; set; }
+
+		public int RPMS { get; set; }
+	}
+
+	public class CFAQueryFanEventArgs : EventArgs
+	{
+		public CFAQueryFanEventArgs()
+		{
+		}
+
+		public CFAQueryFanEventArgs(int Fan1, int Fan2, int Fan3, int Fan4, Binary FanFailSafe)
+		{
+			this.Fan1 = Fan1;
+			this.Fan2 = Fan2;
+			this.Fan3 = Fan3;
+			this.Fan4 = Fan4;
+			this.FanFailSafe = FanFailSafe;
+		}
+
+		public int Fan1 { get; set; }
+
+		public int Fan2 { get; set; }
+
+		public int Fan3 { get; set; }
+
+		public int Fan4 { get; set; }
+
+		public Binary FanFailSafe { get; set; }
+	}
 }

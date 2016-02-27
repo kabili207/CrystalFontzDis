@@ -21,54 +21,54 @@ using System.Text;
 
 namespace Crystalfontz.Displays
 {
-    [Flags]
-    public enum Binary : byte
-    {
-        Bit1 = 1,
-        Bit2 = 2,
-        Bit3 = 4,
-        Bit4 = 8,
-        Bit5 = 16,
-        Bit6 = 32,
-        Bit7 = 64,
-        Bit8 = 128
-    }
+	[Flags]
+	public enum Binary : byte
+	{
+		Bit1 = 1,
+		Bit2 = 2,
+		Bit3 = 4,
+		Bit4 = 8,
+		Bit5 = 16,
+		Bit6 = 32,
+		Bit7 = 64,
+		Bit8 = 128
+	}
 
-    public static class BinaryHelper
-    {
-        /// <summary>
-        /// Toggle a bit on/off in a bitmask
-        /// </summary>
-        /// <param name="BitMask">Copy of the Binary bitmask</param>
-        /// <param name="BitIndex">The Index of the bit 0-7</param>
-        /// <param name="Enabled">Is the bit on/off? False = Off, True = On</param>
-        /// <param name="StartAtZero">Should the First Index be 0 or 1? True = 0, False = 1</param>
-        /// <returns></returns>
-        public static Binary ToggleBit(Binary BitMask, byte BitIndex, bool Enabled, bool StartAtZero)
-        {
-            byte _count = 0;
-            if (StartAtZero == false)
-            {
-                _count = 1;
-            }
-            foreach (byte _byteValue in Enum.GetValues(typeof(Binary)))
-            {
-                if (_count == BitIndex)
-                {
-                    if (Enabled)
-                    {
-                        BitMask = BitMask | (Binary)Enum.ToObject(typeof(Binary), _byteValue);
-                    }
-                    else
-                    {
-                        BitMask = BitMask &~ (Binary)Enum.ToObject(typeof(Binary), _byteValue);
-                    }
-                }
-                    _count++;
-            }
-            return BitMask;
-        }
-    }
+	public static class BinaryHelper
+	{
+		/// <summary>
+		/// Toggle a bit on/off in a bitmask
+		/// </summary>
+		/// <param name="BitMask">Copy of the Binary bitmask</param>
+		/// <param name="BitIndex">The Index of the bit 0-7</param>
+		/// <param name="Enabled">Is the bit on/off? False = Off, True = On</param>
+		/// <param name="StartAtZero">Should the First Index be 0 or 1? True = 0, False = 1</param>
+		/// <returns></returns>
+		public static Binary ToggleBit(Binary BitMask, byte BitIndex, bool Enabled, bool StartAtZero)
+		{
+			byte _count = 0;
+			if (StartAtZero == false)
+			{
+				_count = 1;
+			}
+			foreach (byte _byteValue in Enum.GetValues(typeof(Binary)))
+			{
+				if (_count == BitIndex)
+				{
+					if (Enabled)
+					{
+						BitMask = BitMask | (Binary)Enum.ToObject(typeof(Binary), _byteValue);
+					}
+					else
+					{
+						BitMask = BitMask & ~(Binary)Enum.ToObject(typeof(Binary), _byteValue);
+					}
+				}
+				_count++;
+			}
+			return BitMask;
+		}
+	}
 
 
 

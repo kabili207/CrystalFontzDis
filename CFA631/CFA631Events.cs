@@ -21,7 +21,7 @@ using System.Text;
 
 namespace Crystalfontz.Displays
 {
-    public sealed partial class CFA631
-    {
-    }
+	public sealed partial class CFA631
+	{
+	}
 }

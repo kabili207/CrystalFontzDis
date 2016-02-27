@@ -16,40 +16,42 @@
 
 namespace Crystalfontz.Displays
 {
-    /// <summary>
-    /// Structure to contain data related to a ComDevice.
-    /// </summary>
-    public struct ComDevice
-    {
-        string _name;
-        string _portName;
-        /// <summary>
-        /// This is the logical name that you would see in device manager
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-            }
-        }
-        /// <summary>
-        /// This is the name of the port the SerialPort class needs
-        /// </summary>
-        public string PortName
-        {
-            get
-            {
-                return _portName;
-            }
-            set
-            {
-                _portName = value;
-            }
-        }
-    }
+	/// <summary>
+	/// Structure to contain data related to a ComDevice.
+	/// </summary>
+	public struct ComDevice
+	{
+		string _name;
+		string _portName;
+
+		/// <summary>
+		/// This is the logical name that you would see in device manager
+		/// </summary>
+		public string Name
+		{
+			get
+			{
+				return _name;
+			}
+			set
+			{
+				_name = value;
+			}
+		}
+
+		/// <summary>
+		/// This is the name of the port the SerialPort class needs
+		/// </summary>
+		public string PortName
+		{
+			get
+			{
+				return _portName;
+			}
+			set
+			{
+				_portName = value;
+			}
+		}
+	}
 }

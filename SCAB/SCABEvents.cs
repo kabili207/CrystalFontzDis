@@ -21,15 +21,15 @@ using System.Text;
 
 namespace Crystalfontz.Modules
 {
-    public partial class SCAB
-    {
-        public delegate void FanReportHandler(object sender, CFAFanReportEventArgs e);
-        public event FanReportHandler FanReport;
+	public partial class SCAB
+	{
+		public delegate void FanReportHandler(object sender, CFAFanReportEventArgs e);
+		public event FanReportHandler FanReport;
 
-        public delegate void TemperatureReportHandler(object sender, CFATemperatureReportEventArgs e);
-        public event TemperatureReportHandler TemperatureReport;
+		public delegate void TemperatureReportHandler(object sender, CFATemperatureReportEventArgs e);
+		public event TemperatureReportHandler TemperatureReport;
 
-        public delegate void QueryFanPowerHandler(object sender, CFAQueryFanEventArgs e);
-        public event QueryFanPowerHandler QueryFanPower;
-    }
+		public delegate void QueryFanPowerHandler(object sender, CFAQueryFanEventArgs e);
+		public event QueryFanPowerHandler QueryFanPower;
+	}
 }

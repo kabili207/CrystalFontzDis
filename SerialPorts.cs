@@ -24,51 +24,53 @@ using System.Management;
 
 namespace Crystalfontz.Displays
 {
-    public class SerialPorts
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public static ComDevice[] ComPorts
-        {
-            get
-            {
-                //First we want to get a list of port names
-                //I would have went full WMI but I had problems finding Virtual Com Ports
-                string[] _portNames = SerialPort.GetPortNames().Distinct().ToArray<string>();
+	public class SerialPorts
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		public static ComDevice[] ComPorts
+		{
+			get
+			{
+				//First we want to get a list of port names
+				//I would have went full WMI but I had problems finding Virtual Com Ports
+				string[] _portNames = SerialPort.GetPortNames().Distinct().ToArray<string>();
 
-                //Create an bindable array of ComDevice(s) to return
-                ComDevice[] _return = new ComDevice[_portNames.Length];
+				//Create an bindable array of ComDevice(s) to return
+				ComDevice[] _return = new ComDevice[_portNames.Length];
 
-                //Loop threw all PortNames From SerialPort
-                for (int _count = 0; _count < _portNames.Length; _count++)
-                {
-                    //Query WMI for all PNP (Plug and Play) Devices on the computer that contain (COMxx) in the caption.
-                    //http://msdn.microsoft.com/en-us/library/aa394353(VS.85).aspx Win32_PnpEnity Object
-                    ManagementObjectSearcher deviceList = new ManagementObjectSearcher("Select Caption from Win32_PnPEntity WHERE Caption LIKE '%(" + _portNames[_count] + ")%'");
+				//Loop threw all PortNames From SerialPort
+				for (int _count = 0; _count < _portNames.Length; _count++)
+				{
+					//Query WMI for all PNP (Plug and Play) Devices on the computer that contain (COMxx) in the caption.
+					//http://msdn.microsoft.com/en-us/library/aa394353(VS.85).aspx Win32_PnpEnity Object
+					ManagementObjectSearcher deviceList = new ManagementObjectSearcher("Select Caption from Win32_PnPEntity WHERE Caption LIKE '%(" + _portNames[_count] + ")%'");
 
-                    //Make sure we found the device
-                    if (deviceList != null)
-                    {
-                        //Sould only be one but you never know right?
-                        //Could have thrown error on more the one but I will just allow
-                        foreach (ManagementObject _comDevice in deviceList.Get())
-                        {
-                            //Set the ComDevices Name and PortName
-                            _return[_count].PortName = _portNames[_count];
-                            _return[_count].Name = _comDevice.GetPropertyValue("Caption").ToString();
-                            break;
-                        }//End foreach device in list
+					//Make sure we found the device
+					if (deviceList != null)
+					{
+						//Sould only be one but you never know right?
+						//Could have thrown error on more the one but I will just allow
+						foreach (ManagementObject _comDevice in deviceList.Get())
+						{
+							//Set the ComDevices Name and PortName
+							_return[_count].PortName = _portNames[_count];
+							_return[_count].Name = _comDevice.GetPropertyValue("Caption").ToString();
+							break;
+						}//End foreach device in list
 
-                    }//End deviceList Null Check
+					}//End deviceList Null Check
 
-                }//End foreach loop
+				}//End foreach loop
 
-                return _return;
+				return _return;
 
-            }//end get
+			}//end get
 
-        }//end prop
+		}
+//end prop
 
-    }//end class
+	}
+//end class
 }

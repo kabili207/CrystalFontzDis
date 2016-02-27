@@ -16,25 +16,25 @@
 
 namespace Crystalfontz.Displays
 {
-    public sealed partial class CFA635
-    {
+	public sealed partial class CFA635
+	{
 
-        public enum KeysMask
-        {
-            UP = 1,
-            Enter = 2,
-            Cancel = 4,
-            Left = 8,
-            Right = 16,
-            Down = 32
-        }
+		public enum KeysMask
+		{
+			UP = 1,
+			Enter = 2,
+			Cancel = 4,
+			Left = 8,
+			Right = 16,
+			Down = 32
+		}
 
-        public enum LEDColor
-        {
-            Green = 0,
-            Red = 1
-        }
+		public enum LEDColor
+		{
+			Green = 0,
+			Red = 1
+		}
 
 
-    }
+	}
 }

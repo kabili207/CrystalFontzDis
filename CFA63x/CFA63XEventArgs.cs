@@ -23,123 +23,129 @@ namespace Crystalfontz.Displays
 {
 
 
-    public class CFAReadDataEventArgs : EventArgs
-    {
-        public CFAReadDataEventArgs()
-        {
-        }
+	public class CFAReadDataEventArgs : EventArgs
+	{
+		public CFAReadDataEventArgs()
+		{
+		}
 
-        public CFAReadDataEventArgs(byte[] Data, int AddressCode)
-        {
-            this.Data = Data;
-            this.AddressCode = AddressCode;
-        }
-        public byte[] Data { get; set; }
-        public int AddressCode { get; set; }
-    }
+		public CFAReadDataEventArgs(byte[] Data, int AddressCode)
+		{
+			this.Data = Data;
+			this.AddressCode = AddressCode;
+		}
 
-    public class CFAPacketEventArgs : EventArgs
-    {
-        public CFAPacketEventArgs()
-        {
-        }
+		public byte[] Data { get; set; }
 
-        public CFAPacketEventArgs(CFAPacket Packet)
-        {
-            this.Packet = Packet;
-        }
-        public CFAPacket Packet { get; set; }
-    }
+		public int AddressCode { get; set; }
+	}
 
-    public class CFAHardwareFirmwareEventArgs : EventArgs
-    {
-        public CFAHardwareFirmwareEventArgs()
-        {
-        }
+	public class CFAPacketEventArgs : EventArgs
+	{
+		public CFAPacketEventArgs()
+		{
+		}
 
-        public CFAHardwareFirmwareEventArgs(string Information)
-        {
-            this.Information = Information;
-        }
-        public string Information { get; set; }
-    }
+		public CFAPacketEventArgs(CFAPacket Packet)
+		{
+			this.Packet = Packet;
+		}
+
+		public CFAPacket Packet { get; set; }
+	}
+
+	public class CFAHardwareFirmwareEventArgs : EventArgs
+	{
+		public CFAHardwareFirmwareEventArgs()
+		{
+		}
+
+		public CFAHardwareFirmwareEventArgs(string Information)
+		{
+			this.Information = Information;
+		}
+
+		public string Information { get; set; }
+	}
 
 
-    public class CFAKeyEventArgs : EventArgs
-    {
-        public CFAKeyEventArgs()
-        {
-        }
+	public class CFAKeyEventArgs : EventArgs
+	{
+		public CFAKeyEventArgs()
+		{
+		}
 
-        public CFAKeyEventArgs(Keys Key)
-        {
-            this.Key = Key;
-        }
-        public Keys Key { get; set; }
-    }
+		public CFAKeyEventArgs(Keys Key)
+		{
+			this.Key = Key;
+		}
 
-    public class CFAReadUserFlashEventArgs : EventArgs
-    {
-        public CFAReadUserFlashEventArgs()
-        {
-        }
+		public Keys Key { get; set; }
+	}
 
-        public CFAReadUserFlashEventArgs(byte[] Data)
-        {
-            this.Data = Data;
-        }
-        public byte[] Data { get; set; }
-    }
+	public class CFAReadUserFlashEventArgs : EventArgs
+	{
+		public CFAReadUserFlashEventArgs()
+		{
+		}
 
-    public class CFAReportingAndStatusEventArgs : EventArgs
-    {
-        public CFAReportingAndStatusEventArgs()
-        {
-        }
+		public CFAReadUserFlashEventArgs(byte[] Data)
+		{
+			this.Data = Data;
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Binary Fans { get; set; }
+		public byte[] Data { get; set; }
+	}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Binary Sensors1_8 { get; set; }
+	public class CFAReportingAndStatusEventArgs : EventArgs
+	{
+		public CFAReportingAndStatusEventArgs()
+		{
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Binary Sensors9_15 { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public Binary Fans { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Binary Sensors16_23 { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public Binary Sensors1_8 { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Binary Sensors24_32 { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public Binary Sensors9_15 { get; set; }
 
-        public byte KeyReleases { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public Binary Sensors16_23 { get; set; }
 
-        public byte KeyPresses { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public Binary Sensors24_32 { get; set; }
 
-        public Binary ATXPowerSwitch { get; set; }
+		public byte KeyReleases { get; set; }
 
-        public byte WatchdogCounter { get; set; }
+		public byte KeyPresses { get; set; }
 
-        public byte Fan1Glitch { get; set; }
+		public Binary ATXPowerSwitch { get; set; }
 
-        public byte Fan2Glitch { get; set; }
+		public byte WatchdogCounter { get; set; }
 
-        public byte Fan3Glitch { get; set; }
+		public byte Fan1Glitch { get; set; }
 
-        public byte Fan4Glitch { get; set; }
+		public byte Fan2Glitch { get; set; }
 
-        public int Backlight { get; set; }
-        
-        public int Contrast { get; set; }
-    }
+		public byte Fan3Glitch { get; set; }
+
+		public byte Fan4Glitch { get; set; }
+
+		public int Backlight { get; set; }
+
+		public int Contrast { get; set; }
+	}
 }

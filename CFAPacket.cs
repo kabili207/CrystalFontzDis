@@ -21,11 +21,11 @@ using System.Text;
 
 namespace Crystalfontz.Displays
 {
-    public struct CFAPacket
-    {
-        public byte Command;
-        public int DataLength;
-        public byte[] Data;
-        public ushort CRC;
-    }
+	public struct CFAPacket
+	{
+		public byte Command;
+		public int DataLength;
+		public byte[] Data;
+		public ushort CRC;
+	}
 }
