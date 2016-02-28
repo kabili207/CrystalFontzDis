@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using System.IO.Ports;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 /*
     This program is free software: you can redistribute it and/or modify
@@ -32,9 +33,6 @@ namespace Crystalfontz.Displays
 		//Store the name of the port we are using
 		protected string _portName = "";
 
-		//The thread we are reading on
-		private Thread _spReader;
-
 		//Default baud rate to 115,200
 		protected int _baudRate = 115200;
 
@@ -46,8 +44,18 @@ namespace Crystalfontz.Displays
 
 		//the serialPort we will be using
 		protected SerialPort _sp;
+		
+		protected Queue<byte> _incomingBytes = new Queue<byte>();
 
 		public DeviceID DeviceModel;
+		
+		private object _incomingQueueLock = new object();
+
+		private BlockingCollection<byte[]> outputQueue = new BlockingCollection<byte[]>();
+
+		private Task _processingThread;
+		private Task _outputThread;
+		private CancellationTokenSource _cancellationToken;
 
 		/// <summary>
 		/// Returns the baudrate
@@ -68,6 +76,17 @@ namespace Crystalfontz.Displays
 			get
 			{
 				return _portName;
+			}
+		}
+
+		/// <summary>
+		/// Returns true if SerialPort is connected.
+		/// </summary>
+		public bool IsOpen
+		{
+			get
+			{
+				return _sp.IsOpen;
 			}
 		}
 
@@ -112,21 +131,26 @@ namespace Crystalfontz.Displays
 			_sp = new SerialPort(_portName);
 			_sp.BaudRate = _baudRate;
 			_sp.Open();
-			_spReader = new Thread(this.searchForData);
-			_spReader.Name = "Serial Reader Thread";
-			_spReader.Start();
+			
+			_cancellationToken = new CancellationTokenSource();
+			
+			_processingThread = Task.Factory.StartNew(() => searchForData(),
+				_cancellationToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+			
+			_outputThread = Task.Factory.StartNew(() => OutputThread(),
+				_cancellationToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+			
 		}
 
-		/// <summary>
-		/// Returns true if SerialPort is connected.
-		/// </summary>
-		public bool IsOpen
+		#region IDisposable Members
+
+		public void Dispose()
 		{
-			get
-			{
-				return _sp.IsOpen;
-			}
+			_cancellationToken.Cancel();
+			_sp.Close();
 		}
+
+		#endregion
 
 		/// <summary>
 		/// These will trigger event that are common in all 3 CFA usb lcds
@@ -302,6 +326,113 @@ namespace Crystalfontz.Displays
 			}
 		}
 
+		private void processIncomingQueue()
+		{
+			bool checkAgain = false;
+			
+			lock (_incomingQueueLock)
+			{
+				if (_incomingBytes.Count < 4)
+					return;
+				
+				byte command = _incomingBytes.Peek();
+				
+				int maskedCommand = command & 0x3F;
+				
+				if (maskedCommand < 0 || maskedCommand > 35)
+				{
+					// Invalid packet
+					_incomingBytes.Dequeue();
+					checkAgain = true;
+				}
+				else
+				{
+					byte packetLength = _incomingBytes.ElementAt(1);
+					int totalLength = packetLength + 4;
+					
+					if (packetLength > 22)
+					{
+						// Invalid packet
+						_incomingBytes.Dequeue();
+						checkAgain = true;
+					}
+					else if (_incomingBytes.Count >= totalLength)
+					{
+						// We have enough data for a full packet
+						// Let's process it now.
+						
+						//Create a new packet
+						CFAPacket _Packet = new CFAPacket()
+						{
+							Command = command,
+							DataLength = packetLength,
+							Data = new byte[packetLength]
+						};
+
+						//Read in all data packets
+						for (int i = 0; i < _Packet.DataLength; i++)
+						{
+							_Packet.Data[i] = _incomingBytes.ElementAt(i + 2);	
+						}
+
+						//Read the CRC
+						byte[] _crcByte = new byte[2];
+						
+						_crcByte[0] = _incomingBytes.ElementAt(totalLength - 2);
+						_crcByte[1] = _incomingBytes.ElementAt(totalLength - 1);
+
+						_Packet.CRC = BitConverter.ToUInt16(_crcByte, 0);
+
+						
+						List<byte> _tempBytes = new byte[] { command, packetLength }.Concat(_Packet.Data).ToList();
+						CRC.CalculateCRC(ref _tempBytes);
+						
+						if (_crcByte[0] == _tempBytes.ElementAt(_tempBytes.Count - 2) &&
+						   _crcByte[1] == _tempBytes.Last())
+						{
+							for (int i = 0; i < totalLength; i++)
+							{
+								_incomingBytes.Dequeue();
+							}
+							this.parseData(_Packet);
+						}
+						else
+						{
+							_incomingBytes.Dequeue();	
+						}
+						
+						
+						// Check for additional packets
+						checkAgain = true;
+					}
+				}
+				
+			}
+			if (checkAgain)
+				processIncomingQueue();
+		}
+
+		// the output thread
+		private void OutputThread()
+		{
+			// initialize serial port
+			// read data from queue until end
+			byte[] data;
+			while (outputQueue.TryTake(out data, Timeout.Infinite))
+			{
+				// output text to serial port
+				_sp.Write(data.ToArray(), 0, data.Length);
+
+				//Console.WriteLine("Sent command: " + data[0]);
+				
+				// TODO: FIX ME
+				// We're supposed to wait for a response before sending any
+				// additional packets, but I'm too lazy to actually check
+				// if we've received a reply.
+				Thread.Sleep(5);
+			}
+		}
+
 		private void searchForData()
 		{
 			//Create a Temp byte to store the data in
@@ -312,49 +443,40 @@ namespace Crystalfontz.Displays
 				//on the off case there is nothing to read we sleep!
 				if (_sp.BytesToRead == 0)
 				{
-					//This will only make OUR thread sleep :)
 					Thread.Sleep(250);
 				}
 				else
 				{
-					//Read one byte looking for Packet start
-					_tmpByte = Convert.ToByte(_sp.ReadByte());
-
-					if (_tmpByte != 0)
+					byte[] buffer = new byte[_sp.BytesToRead];
+					int bytesRead = 0;
+					int totalBytesRead = 0;
+					int offset = 0;
+					int remaining = buffer.Length;
+					
+					do
 					{
-						//Create a new packet
-						CFAPacket _Packet = new CFAPacket();
+						bytesRead = _sp.Read(buffer, offset, remaining);
+						offset += bytesRead;
+						remaining -= bytesRead;
+						totalBytesRead += bytesRead;
+						
+					} while (remaining > 0 && bytesRead > 0);
+					
+					
+					lock (_incomingQueueLock)
+					{
+						foreach (byte b in buffer)
+							_incomingBytes.Enqueue(b);
+					}
+					
+					processIncomingQueue();
+					
+				}
 
-						//Copy type to packet
-						_Packet.Command = _tmpByte;
-
-						//Set the Data Length
-						_Packet.DataLength = _sp.ReadByte();
-
-						//Need to init the array
-						_Packet.Data = new byte[_Packet.DataLength];
-
-						//Read in all data packets
-						_sp.Read(_Packet.Data, 0, _Packet.DataLength);
-
-						//Read the CRC
-						byte[] _crcByte = new byte[2];
-
-						_sp.Read(_crcByte, 0, 2);
-
-						_Packet.CRC = BitConverter.ToUInt16(_crcByte, 0);
-
-						//Last thing is to pass the packet off
-						this.parseData(_Packet);
-
-					}//End Byte Value 0 check
-
-				}//End Data Check
-
-			}//End While Loop
+			}
 
 		}
-//End Function
+
 
 
 		/// <summary>
@@ -393,7 +515,7 @@ namespace Crystalfontz.Displays
             
 
 			//Write the command out
-			_sp.Write(_sendList.ToArray(), 0, _sendList.Count);
+			outputQueue.Add(_sendList.ToArray());
 		}
 
 		/// <summary>
@@ -440,7 +562,7 @@ namespace Crystalfontz.Displays
 			List<byte> _bytes = new List<byte>();
 			_bytes.Add(Convert.ToByte(CharaterIndex));
 			_bytes.AddRange(Data);
-			if (CharaterIndex < 0 || CharaterIndex < 7)
+			if (CharaterIndex < 0 || CharaterIndex > 7)
 			{
 				throw new IndexOutOfRangeException("CharaterIndex must be 0-7");
 			}
@@ -604,7 +726,7 @@ namespace Crystalfontz.Displays
 			//If Padded is pass in we pad to max LCD Length 22
 			if (Padded)
 			{
-				int padAmount = _maxCharaters - _toWrite.Count;
+				int padAmount = _maxCharaters - _toWrite.Count - XPOS;
 				for (int _count = 0; _count < padAmount; _count++)
 				{
 					//32 is space btw.
@@ -632,15 +754,5 @@ namespace Crystalfontz.Displays
 		{
 
 		}
-
-		#region IDisposable Members
-
-		public void Dispose()
-		{
-			_spReader.Abort();
-			_sp.Close();
-		}
-
-		#endregion
 	}
 }
