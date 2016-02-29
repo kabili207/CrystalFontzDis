@@ -90,10 +90,9 @@ namespace Crystalfontz.Displays
 			//Next: New Byte Array Length 2
 			//First Byte LED
 			//Second Brightness
-			this.SendCommand(Commands.SET_CONFIGURE_GPIO_PIN, new byte[2] {
-				Convert.ToByte(5 + LEDIndex + (int)Color),
-				Convert.ToByte(Brightness)
-			});
+			
+			int gpio = 5 + (LEDIndex * 2) + (int)Color;
+			this.SendCommand(Commands.SET_CONFIGURE_GPIO_PIN, new [] { (byte)gpio, (byte)Brightness });
 		}
 
 		/// <summary>
